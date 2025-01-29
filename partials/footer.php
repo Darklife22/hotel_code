@@ -1,3 +1,3 @@
 <footer>
-    <p>© 2025 Hotel System. Todos los derechos reservados.</p>
+    <p>© 2023 Hotel System. Todos los derechos reservados.</p>
 </footer>

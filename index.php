@@ -7,7 +7,6 @@ include 'partials/navbar.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel - Inicio</title>
-    <!-- Vinculamos el archivo CSS -->
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>

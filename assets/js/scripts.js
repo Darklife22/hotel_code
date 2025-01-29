@@ -1,5 +1,3 @@
-// JavaScript para validaciones de formularios o interacciones adicionales
-
 document.addEventListener('DOMContentLoaded', () => {
     const forms = document.querySelectorAll('form');
 

@@ -35,36 +35,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo "Reserva realizada con éxito.";
 }
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservar Habitación</title>
-    <link rel="stylesheet" href="../assets/css/estilos.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Reservar Habitación</h1>
-        <?php if ($habitacion): ?>
-            <h2><?php echo htmlspecialchars($habitacion['tipo']); ?></h2>
-            <p><?php echo htmlspecialchars($habitacion['descripcion']); ?></p>
-            <p>Precio: $<?php echo htmlspecialchars($habitacion['precio']); ?></p>
-            <form method="POST">
-                <label>ID Cliente:</label>
-                <input type="text" name="id_cliente" required>
-                <label>Fecha Inicio:</label>
-                <input type="date" name="fecha_inicio" required>
-                <label>Fecha Fin:</label>
-                <input type="date" name="fecha_fin" required>
-                <button type="submit">Reservar</button>
-            </form>
-        <?php else: ?>
-            <p>No se encontró la habitación.</p>
-        <?php endif; ?>
-    </div>
-<?php
-include '../partials/footer.php';
-?>
-</body>
-</html>
+
+<div class="container">
+    <h1>Reservar Habitación</h1>
+    <?php if ($habitacion): ?>
+        <h2><?php echo htmlspecialchars($habitacion['tipo']); ?></h2>
+        <p><?php echo htmlspecialchars($habitacion['descripcion']); ?></p>
+        <p>Precio: $<?php echo htmlspecialchars($habitacion['precio']); ?></p>
+        <form method="POST">
+            <label>ID Cliente:</label>
+            <input type="text" name="id_cliente" required>
+            <label>Fecha Inicio:</label>
+            <input type="date" name="fecha_inicio" required>
+            <label>Fecha Fin:</label>
+            <input type="date" name="fecha_fin" required>
+            <button type="submit">Reservar</button>
+        </form>
+    <?php else: ?>
+        <p>No se encontró la habitación.</p>
+    <?php endif; ?>
+</div>
+
+<?php include '../partials/footer.php'; ?>

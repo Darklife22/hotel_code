@@ -1,32 +1,35 @@
-/* Código de reservas.php */
 <?php
 include '../backend/db.php';
-include '../partials/navbar.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id_cliente = $_POST['id_cliente'];
-    $id_habitacion = $_POST['id_habitacion'];
-    $fecha_inicio = $_POST['fecha_inicio'];
-    $fecha_fin = $_POST['fecha_fin'];
+// Obtener todas las reservas
+$query = "SELECT * FROM reservas";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$reservas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $query = "INSERT INTO reservas (id_cliente, id_habitacion, fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?, ?, 'pendiente')";
+// Función para mostrar las reservas en una tabla (se usará en admin.php)
+function obtenerReservas($conn) {
+    $query = "SELECT * FROM reservas";
     $stmt = $conn->prepare($query);
-    $stmt->execute([$id_cliente, $id_habitacion, $fecha_inicio, $fecha_fin]);
-    echo "Reserva realizada con éxito.";
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-?>
-<h1>Reservar Habitación</h1>
-<form method="POST">
-    <label>ID Cliente:</label>
-    <input type="text" name="id_cliente" required>
-    <label>ID Habitación:</label>
-    <input type="text" name="id_habitacion" required>
-    <label>Fecha Inicio:</label>
-    <input type="date" name="fecha_inicio" required>
-    <label>Fecha Fin:</label>
-    <input type="date" name="fecha_fin" required>
-    <button type="submit">Reservar</button>
-</form>
-<?php
-include '../partials/footer.php';
+
+function mostrarReservas($reservas) {
+    echo "<table class='table'>";
+    echo "<thead><tr><th>ID</th><th>ID Cliente</th><th>ID Habitación</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Estado</th><th>Acciones</th></tr></thead>";
+    echo "<tbody>";
+    foreach ($reservas as $reserva) {
+        echo "<tr>";
+        echo "<td>" . $reserva['id'] . "</td>";
+        echo "<td>" . $reserva['id_cliente'] . "</td>";
+        echo "<td>" . $reserva['id_habitacion'] . "</td>";
+        echo "<td>" . $reserva['fecha_inicio'] . "</td>";
+        echo "<td>" . $reserva['fecha_fin'] . "</td>";
+        echo "<td>" . $reserva['estado'] . "</td>";
+        echo "<td><a href='editar_reserva.php?id=" . $reserva['id'] . "'>Editar</a> | <a href='eliminar_reserva.php?id=" . $reserva['id'] . "'>Eliminar</a></td>";
+        echo "</tr>";
+    }
+    echo "</tbody></table>";
+}
 ?>

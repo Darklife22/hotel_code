@@ -6,13 +6,9 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 'admin') {
 }
 
 include '../backend/db.php';
-include '../backend/habitaciones.php';
-include '../backend/reservas.php';
-include '../backend/usuarios.php';
 include '../partials/navbar.php';
 
-// Procesar formulario de agregar habitación
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agregar_habitacion'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tipo = $_POST['tipo'];
     $descripcion = $_POST['descripcion'];
     $precio = $_POST['precio'];
@@ -26,23 +22,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agregar_habitacion']))
     $stmt->execute([$tipo, $descripcion, $precio, $disponible, $oferta, $descuento]);
     echo "Habitación agregada con éxito.";
 }
-
-// Obtener todas las habitaciones, reservas y usuarios
-$habitaciones = obtenerHabitaciones($conn);
-$reservas = obtenerReservas($conn);
-$usuarios = obtenerUsuarios($conn);
 ?>
 
-<h1>Panel de Administración</h1>
-
-<h2>Habitaciones</h2>
-<a href="agregar_habitacion.php" class="btn btn-primary">Agregar Habitación</a>
-<?php mostrarHabitaciones($habitaciones); ?>
-
-<h2>Reservas</h2>
-<?php mostrarReservas($reservas); ?>
-
-<h2>Usuarios</h2>
-<?php mostrarUsuarios($usuarios); ?>
+<h1>Agregar Nueva Habitación</h1>
+<form method="POST">
+    <label>Tipo de Habitación:</label>
+    <input type="text" name="tipo" required>
+    <label>Descripción:</label>
+    <textarea name="descripcion" required></textarea>
+    <label>Precio:</label>
+    <input type="number" name="precio" step="0.01" required>
+    <label>Disponible:</label>
+    <input type="checkbox" name="disponible">
+    <label>Oferta:</label>
+    <input type="checkbox" name="oferta">
+    <label>Descuento (%)</label>
+    <input type="number" name="descuento" step="0.01" min="0" max="100">
+    <button type="submit" name="agregar_habitacion">Guardar</button>
+</form>
 
 <?php include '../partials/footer.php'; ?>
