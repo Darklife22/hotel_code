@@ -3,32 +3,24 @@ session_start();
 include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $usuario = $_POST['usuario'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM usuarios WHERE usuario = :usuario";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':usuario', $usuario);
-    $stmt->execute();
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE usuario = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $usuarioEncontrado = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['nombre'];
+        $_SESSION['user_role'] = $user['rol'];
 
-    if ($usuarioEncontrado && password_verify($password, $usuarioEncontrado['password'])) {
-        $_SESSION['usuario_id'] = $usuarioEncontrado['id'];
-        $_SESSION['usuario_nombre'] = $usuarioEncontrado['usuario'];
-        $_SESSION['rol'] = $usuarioEncontrado['rol'];
-
-        // Redirigir según el rol
-        switch ($_SESSION['rol']) {
-            case 'admin':
-                header('Location: ../views/admin.php');
-                break;
-            case 'recepcionista':
-                header('Location: ../views/reservas.php');
-                break;
-            default: // Cliente u otro rol
-                header('Location: ../index.php');
-        }
+        $redirect_url = match ($_SESSION['user_role']) {
+            'admin' => '../views/admin/index.php',
+            'recepcionista' => '../views/recepcionistas/reservas.php',
+            default => '../index.php',
+        };
+        header("Location: " . $redirect_url);
         exit();
     } else {
         $error = "Usuario o contraseña incorrectos.";
@@ -37,10 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión</title>
     <link rel="stylesheet" href="../assets/css/estilos.css">
 </head>
@@ -50,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <p style="color: red;"><?php echo $error; ?></p>
     <?php endif; ?>
     <form method="POST" action="auth.php">
-        <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario" required>
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" name="username" required>
 
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" required>

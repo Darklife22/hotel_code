@@ -1,8 +1,8 @@
 <?php
 session_start();
-include '../backend/db.php';
-include '../backend/habitaciones.php';
-include '../partials/navbar.php';
+include '../../backend/db.php';
+include '../../backend/habitaciones.php';
+include '../../partials/navbar.php';
 
 $habitaciones = getRooms($conn);
 ?>
@@ -26,4 +26,4 @@ $habitaciones = getRooms($conn);
     </div>
 </div>
 
-<?php include '../partials/footer.php'; ?>
+<?php include '../../partials/footer.php'; ?>

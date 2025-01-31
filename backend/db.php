@@ -1,37 +1,17 @@
 <?php
-$host = 'localhost';
-$dbname = 'hotel_db';
-$username = 'root';
-$password = 'admin1234'; // Reemplaza con tu contraseña real
+// db.php
+require_once __DIR__ . '/../config.php'; // Ruta absoluta usando __DIR__
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // --- Mensajes de éxito y detalles ---
-    echo "Conexión exitosa a la base de datos.<br>";
-    echo "Información del host: " . $conn->getAttribute(PDO::ATTR_CONNECTION_STATUS) . "<br>"; // Detalles del host
-
-    // --- Prueba de consulta (opcional) ---
-    $stmt = $conn->query("SELECT VERSION()"); // Consulta sencilla para verificar la conexión
-    $version = $stmt->fetchColumn();
-    echo "Versión de MySQL: " . $version . "<br>";
-
-    // --- (No incluir en producción) Mostrar errores detallados en desarrollo ---
-    // ini_set('display_errors', 1);
-    // ini_set('display_startup_errors', 1);
-    // error_reporting(E_ALL);
-
+    // Si la conexión es exitosa, puedes dejar este mensaje para confirmarlo
+    echo "Conexión exitosa a la base de datos.";
 } catch (PDOException $e) {
-    // --- Mensajes de error detallados ---
-    echo "Error de conexión: " . $e->getMessage() . "<br>";
-    echo "Código de error: " . $e->getCode() . "<br>"; // Código de error específico
-    echo "Archivo: " . $e->getFile() . "<br>"; // Archivo donde ocurrió el error
-    echo "Línea: " . $e->getLine() . "<br>"; // Línea donde ocurrió el error
-
-    // --- (Opcional) Log del error ---
-    error_log("Error de conexión: " . $e->getMessage());
-
-    exit; // Detener la ejecución si hay un error de conexión
+    // Este error se mostrará en el navegador
+    echo "Error de conexión: " . $e->getMessage();
+    // Este error se registrará en el archivo de logs del servidor
+    error_log("Error de conexión a la base de datos: " . $e->getMessage());
+    die(); // Detiene la ejecución del script para evitar mostrar información sensible
 }
 ?>

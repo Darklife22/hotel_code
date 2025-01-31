@@ -1,36 +1,22 @@
 <?php
-include '../backend/db.php';
+include 'db.php';
 
-// Obtener todos los usuarios
-$query = "SELECT * FROM usuarios";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Función para mostrar los usuarios en una tabla (se usará en admin.php)
-function obtenerUsuarios($conn) {
-    try {
-        $query = "SELECT * FROM usuarios";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        // Log del error (importante para depuración)
-        error_log("Error al obtener usuarios: ". $e->getMessage());
-        // Manejo del error (muestra un mensaje amigable al usuario o redirige)
-        die("Error al obtener usuarios. Por favor, inténtelo de nuevo más tarde."); // O mejor, una página de error personalizada.
-    }
+function getUsers($conn) {
+    $stmt = $conn->prepare("SELECT * FROM usuarios");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-function mostrarUsuarios($usuarios) {
+
+function displayUsers($users) {
     echo "<table class='table'>";
-    echo "<thead><tr><th>ID</th><th>Usuario</th><th>Rol</th><th>Acciones</th></tr></thead>";
+    echo "<thead><tr><th>ID</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>"; // Cambiado "Username" a "Email"
     echo "<tbody>";
-    foreach ($usuarios as $usuario) {
+    foreach ($users as $user) {
         echo "<tr>";
-        echo "<td>" . $usuario['id'] . "</td>";
-        echo "<td>" . $usuario['usuario'] . "</td>";
-        echo "<td>" . $usuario['rol'] . "</td>";
-        echo "<td><a href='editar_usuario.php?id=" . $usuario['id'] . "'>Editar</a> | <a href='eliminar_usuario.php?id=" . $usuario['id'] . "'>Eliminar</a></td>";
+        echo "<td>" . $user['id'] . "</td>";
+        echo "<td>" . $user['email'] . "</td>"; // Usamos $user['email']
+        echo "<td>" . $user['rol'] . "</td>";
+        echo "<td><a href='editar_usuario.php?id=" . $user['id'] . "'>Editar</a> | <a href='eliminar_usuario.php?id=" . $user['id'] . "'>Eliminar</a></td>";
         echo "</tr>";
     }
     echo "</tbody></table>";

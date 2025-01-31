@@ -8,7 +8,7 @@ body {
 
 /* Barra de navegación */
 nav {
-    background-color: #ff6600;
+    background-color: #474747;
     padding: 10px;
     text-align: center;
 }
@@ -135,7 +135,7 @@ form textarea {
 }
 
 form button {
-    background-color: #ff6600;
+    background-color: #474747;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -144,7 +144,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #cc5200;
+    background-color: #474747;
 }
 
 .text-danger {

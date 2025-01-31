@@ -1,35 +1,24 @@
 <?php
-include '../backend/db.php';
+include 'db.php';
 
-// Obtener todas las habitaciones
-$query = "SELECT * FROM habitaciones";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$habitaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Función para mostrar las habitaciones en una tabla (se usará en admin.php)
-
-function obtenerHabitaciones($conn) {
-    $query = "SELECT * FROM habitaciones";
-    $stmt = $conn->prepare($query);
+function getRooms($conn) {
+    $stmt = $conn->prepare("SELECT * FROM habitaciones");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function mostrarHabitaciones($habitaciones) {
+function displayRooms($rooms) {
     echo "<table class='table'>";
-    echo "<thead><tr><th>ID</th><th>Tipo</th><th>Descripción</th><th>Precio</th><th>Disponible</th><th>Oferta</th><th>Descuento</th><th>Acciones</th></tr></thead>";
+    echo "<thead><tr><th>ID</th><th>Tipo</th><th>Descripción</th><th>Precio</th><th>Disponible</th><th>Acciones</th></tr></thead>"; // Columnas corregidas
     echo "<tbody>";
-    foreach ($habitaciones as $habitacion) {
+    foreach ($rooms as $room) {
         echo "<tr>";
-        echo "<td>" . $habitacion['id'] . "</td>";
-        echo "<td>" . $habitacion['tipo'] . "</td>";
-        echo "<td>" . $habitacion['descripcion'] . "</td>";
-        echo "<td>" . $habitacion['precio'] . "</td>";
-        echo "<td>" . ($habitacion['disponible'] ? 'Sí' : 'No') . "</td>";
-        echo "<td>" . ($habitacion['oferta'] ? 'Sí' : 'No') . "</td>";
-        echo "<td>" . $habitacion['descuento'] . "%</td>";
-        echo "<td><a href='editar_habitacion.php?id=" . $habitacion['id'] . "'>Editar</a> | <a href='eliminar_habitacion.php?id=" . $habitacion['id'] . "'>Eliminar</a></td>";
+        echo "<td>" . $room['id'] . "</td>";
+        echo "<td>" . $room['tipo'] . "</td>";
+        echo "<td>" . $room['descripcion'] . "</td>";
+        echo "<td>" . $room['precio'] . "</td>";
+        echo "<td>" . ($room['disponible'] ? 'Sí' : 'No') . "</td>";
+        echo "<td><a href='editar_habitacion.php?id=" . $room['id'] . "'>Editar</a> | <a href='eliminar_habitacion.php?id=" . $room['id'] . "'>Eliminar</a></td>";
         echo "</tr>";
     }
     echo "</tbody></table>";
